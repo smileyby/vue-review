@@ -3,7 +3,7 @@ module.exports = {
   title: 'VUE-REVIEW',
   description: '点亮Vue技能点',
   head: [
-    ['link', { rel: 'icon', href: '/head.jpg' }]
+    ['link', { rel: 'icon', href: '/link.png' }]
   ],
   themeConfig: {
     logo: '/avatar.gif',
@@ -13,8 +13,18 @@ module.exports = {
     smoothScroll: true,
     nav: [
       { text: 'Home', link: '/' },
-      { text: 'Guide', link: '/guide/' },
       { text: 'Github', link: 'https://github.com/smileyby' },
-    ]
+    ],
+    sidebar: {
+      '/': [
+        '',  
+        'base',
+        'principle',
+        'vuex',
+        'router',
+        'contact', 
+        'about'
+      ]
+    }
   }
 }
