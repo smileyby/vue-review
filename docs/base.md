@@ -165,7 +165,30 @@ export default {
 
 ### 生命周期
 
+1. beforeCreate
+   1. 组件事件和声明周期的钩子初始化，此时 data 和 methods 等未挂载
+2. created
+   1. 判断 主元素是否存在，
+      1. 否，等待 $mount 被调用后再向下执行
+      2. 是，判断是否有 template 属性
+         1. 是，调用render function 覆盖掉 el元素下的内容
+         2. 否，则使用el 元素下的 outerHTML 作用模板进行渲染
+   2. 关于渲染的优先级：render > template > outerHTML，采用的都是覆盖式渲染
+3. beforeMount
+   1. 生成 el dom树并替换掉 页面中的 el 元素
+4. mounted
+   1. 渲染和数据绑定、事件绑定、watcher等已全部就位
+5. beforeUpdate
+   1. 数更新时，触发beforeUpdate
+   2. dom-diff 重新 生成虚拟dom 并渲染到页面上
+6. updated
+7. beforeDestory
+   1. 执行销毁操作、销毁当前实例 watch 的元素，引用的子组件以及监听的事件 
+8. destoryed
+
 ### router
+
+
 
 ### vuex
 
