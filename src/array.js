@@ -33,7 +33,7 @@ methodsNeedChange.forEach((methodName) => {
     if (inserted) {
       ob.observeArray(inserted);
     }
-    const result = riginal.apply(this, arguments);
+    const result = original.apply(this, arguments);
     return result;
   }, false);
 })
