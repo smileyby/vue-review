@@ -1,6 +1,7 @@
 import { observe } from "./observe";
+import Dep from './Dep.js';
 function defineReactive(data, key, val){
-  console.log('defineReactive', data, key);
+  const dep = new Dep();
   if (arguments.length == 2) {
     val = data[key];
   }
@@ -15,6 +16,13 @@ function defineReactive(data, key, val){
     configurable: true,
     get(){
       console.log('正在访问obj的'+ key +'属性');
+      // 如果处于依赖的收集阶段
+      if (Dep.target) {
+        dep.depend();
+        if (childOb) {
+          childOb.dep.depend();
+        }
+      }
       return val;
     },
     set(newValue){
@@ -25,6 +33,9 @@ function defineReactive(data, key, val){
       val = newValue;
       // 当设置了新值，这个值也要被observe
       childOb = observe(newValue);
+
+      // 发布订阅
+      dep.notify();
     }
   })
 }

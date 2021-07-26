@@ -1,4 +1,5 @@
 import { observe } from './observe';
+import Watcher from './Watcher.js';
 var obj = {
   a: {
     b: {
@@ -19,6 +20,10 @@ var obj = {
  */
 
 observe(obj);
+
+new Watcher(obj, 'a.b.c', (val)=>{
+  console.log({val});
+})
 obj.d++;
 obj.a.b.c = 30;
 obj.g.push(66);
