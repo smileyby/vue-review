@@ -1,8 +1,8 @@
-import Dep from './Dep.js';
+import parsePath from "./parsePath.js";
+import Dep from './Dep.js'
 var uid = 0;
 export default class Watcher {
   constructor(target, expression, callback){
-    console.log('Watcher constructor');
     this.id = uid++;
     this.target = target;
     this.getter = parsePath(expression);
@@ -13,11 +13,12 @@ export default class Watcher {
     this.run();
   }
   get(){
+    // 依赖收集阶段，让全局的Dep.target 设置成 Watcher本身
     Dep.target = this;
     const obj = this.target;
     var value;
     try {
-     value = this.getter(obj);
+      value = this.getter(obj)
     } finally {
       Dep.target = null;
     }
@@ -28,21 +29,10 @@ export default class Watcher {
   }
   getAndInvoke(cb){
     const value = this.get();
-    if (value !== this.value || typeof value == 'object') {
+    if (value !== this.value || typeof value === 'object') {
       const oldValue = this.value;
       this.value = value;
-      cb.call(this.target, value, oldValue);
+      cb.call(this.target, value ,oldValue);
     }
-  }
-}
-
-function parsePath(str){
-  var segments = str.split('.');
-  return (obj) => {
-    for (let i = 0; i < segments.length; i++) {
-      if (!obj) return;
-      obj = obj[segments[i]]
-    }
-    return obj;
   }
 }

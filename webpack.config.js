@@ -1,6 +1,6 @@
 var path = require('path');
 module.exports = {
-  entry: './src/main.js',
+  entry: './src/index.js',
   output: {
     publicPath: 'xuni',
     filename: 'bundle.js',

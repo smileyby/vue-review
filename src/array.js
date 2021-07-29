@@ -1,33 +1,39 @@
-import { def } from './utils';
+import { def } from './utils.js';
 const arrayPrototype = Array.prototype;
+export const arrayMethods = Object.create(arrayPrototype);
 
-// 以array的prototype为原型，创建一个arrayMethods对象
-const arrayMethods = Object.create(arrayPrototype);
 const methodsNeedChange = [
-  'push', 
-  'pop', 
-  'shift', 
-  'unshift', 
-  'splice', 
-  'sort', 
+  'push',
+  'pop',
+  'shift',
+  'unshift',
+  'splice',
+  'sort',
   'reverse'
 ];
 
-methodsNeedChange.forEach((methodName) => {
+methodsNeedChange.forEach(methodName => {
   const original = arrayPrototype[methodName];
   
-  // 定义新的方法
   def(arrayMethods, methodName, function(){
-    // 将数组身上的__ob__ 取出来
+
+    // 恢复原有功能
+    const result = original.apply(this, arguments);
+
+    // 类数组转数组
+    const args = [...arguments];
+
     const ob = this.__ob__;
-    let inserted;
-    switch(methodName){
+
+    // 有三种方法 push/unshift/splice 能够插入新值，现在要把插入的新项也要变成 observe的
+    let inserted = [];
+    switch(methodName) {
       case 'push':
       case 'unshift':
         inserted = arguments;
         break;
       case 'splice':
-        inserted = Array.prototype.slice.call(arguments, 2);
+        inserted = args.slice(2);
         break;    
     }
     if (inserted) {
@@ -35,9 +41,6 @@ methodsNeedChange.forEach((methodName) => {
     }
 
     ob.dep.notify();
-
-    const result = original.apply(this, arguments);
     return result;
   }, false);
 })
-export default arrayMethods;
